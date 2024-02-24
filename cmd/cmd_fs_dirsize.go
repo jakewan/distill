@@ -116,9 +116,9 @@ func (cmd *cmdFSDirsize) run(ctx context.Context) error {
 			s int64
 		}) int {
 			if a.s > b.s {
-				return 1
-			} else if a.s < b.s {
 				return -1
+			} else if a.s < b.s {
+				return 1
 			}
 			return 0
 		})
@@ -147,9 +147,9 @@ func (cmd *cmdFSDirsize) run(ctx context.Context) error {
 			s int64
 		}) int {
 			if a.s > b.s {
-				return 1
-			} else if a.s < b.s {
 				return -1
+			} else if a.s < b.s {
+				return 1
 			}
 			return 0
 		})
@@ -169,7 +169,8 @@ func (cmd *cmdFSDirsize) run(ctx context.Context) error {
 		fileSystem := os.DirFS(startingDirAbs)
 		if err := fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
 			if err != nil {
-				return fmt.Errorf("passthrough error: %w", err)
+				log.Printf("Error walking filesystem: %s", err)
+				return nil
 			}
 			if path == "." {
 				return nil
