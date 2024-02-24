@@ -39,8 +39,8 @@ func (cmd *cmdFSDirsize) init(args []string) error {
 }
 
 func (cmd *cmdFSDirsize) run(ctx context.Context) error {
-	const outputLineTemplate string = "%-36s%d\n"
-	const outputHeaderTemplate string = "%-36sSize in bytes\n"
+	const outputHeaderTemplate string = "%-36s  Size in bytes\n"
+	const outputLineTemplate string = "%-36s  %d\n"
 
 	type fileEntryInfo struct {
 		absPath     string
