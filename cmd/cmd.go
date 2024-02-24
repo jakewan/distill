@@ -10,12 +10,14 @@ type argName string
 
 const (
 	argNameStartingDir argName = "startingdir"
+	argNameVerbose     argName = "verbose"
 )
 
 type argUsage string
 
 const (
 	argUsageStartingDir argUsage = "The starting directory of the operation"
+	argUsageVerbose     argUsage = "Verbose output"
 )
 
 type runner interface {

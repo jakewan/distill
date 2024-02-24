@@ -5,7 +5,6 @@ import (
 	"flag"
 	"fmt"
 	"io/fs"
-	"log"
 	"os"
 	"path/filepath"
 	"slices"
@@ -15,6 +14,7 @@ type cmdFSDirsize struct {
 	flags       *flag.FlagSet
 	deps        Dependencies
 	startingDir string
+	verbose     bool
 }
 
 func newCmdFSDirsize(deps Dependencies) runner {
@@ -23,6 +23,7 @@ func newCmdFSDirsize(deps Dependencies) runner {
 		deps:  deps,
 	}
 	cmd.flags.StringVar(&cmd.startingDir, string(argNameStartingDir), "", string(argUsageStartingDir))
+	cmd.flags.BoolVar(&cmd.verbose, string(argNameVerbose), false, string(argUsageVerbose))
 	return &cmd
 }
 
@@ -83,6 +84,9 @@ func (cmd *cmdFSDirsize) run(ctx context.Context) error {
 					currentParent := filepath.Dir(path)
 					for {
 						if currentParent == k {
+							if cmd.verbose {
+								fmt.Printf("%s is in %s\n", path, k)
+							}
 							v.sizeInBytes += info.Size()
 							return nil
 						}
@@ -116,9 +120,9 @@ func (cmd *cmdFSDirsize) run(ctx context.Context) error {
 			s int64
 		}) int {
 			if a.s > b.s {
-				return 1
-			} else if a.s < b.s {
 				return -1
+			} else if a.s < b.s {
+				return 1
 			}
 			return 0
 		})
@@ -147,9 +151,9 @@ func (cmd *cmdFSDirsize) run(ctx context.Context) error {
 			s int64
 		}) int {
 			if a.s > b.s {
-				return 1
-			} else if a.s < b.s {
 				return -1
+			} else if a.s < b.s {
+				return 1
 			}
 			return 0
 		})
@@ -163,13 +167,16 @@ func (cmd *cmdFSDirsize) run(ctx context.Context) error {
 		return newRequiredArgumentMissingError(argNameStartingDir)
 	}
 	if startingDirAbs, err := filepath.Abs(cmd.startingDir); err != nil {
-		return err
+		return fmt.Errorf("error getting absolute path of starting directory: %w", err)
 	} else {
-		log.Printf("Starting directory: %s", startingDirAbs)
+		fmt.Printf("Starting directory: %s\n", startingDirAbs)
 		fileSystem := os.DirFS(startingDirAbs)
 		if err := fs.WalkDir(fileSystem, ".", func(path string, d fs.DirEntry, err error) error {
 			if err != nil {
-				return fmt.Errorf("passthrough error: %w", err)
+				if cmd.verbose {
+					fmt.Printf("Error walking filesystem: %s\n", err)
+				}
+				return nil
 			}
 			if path == "." {
 				return nil
