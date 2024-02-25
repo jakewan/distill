@@ -9,8 +9,15 @@ type Dependencies interface{}
 type argName string
 
 const (
-	argNameStartingDir argName = "startingdir"
+	argNameStartingDir argName = "startingDir"
 	argNameVerbose     argName = "verbose"
+)
+
+type argShortFlag string
+
+const (
+	argShortFlagStartingDir argShortFlag = "s"
+	argShortFlagVerbose     argShortFlag = "v"
 )
 
 type argUsage string

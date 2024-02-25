@@ -2,18 +2,17 @@ package cmd
 
 import (
 	"context"
-	"flag"
 	"fmt"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"slices"
 
-	"github.com/cbsinteractive/jakewan/distill/flags"
+	"github.com/cbsinteractive/jakewan/altflag"
 )
 
 type cmdFSDirsize struct {
-	flags       flags.FlagSet
+	flags       altflag.FlagSet
 	deps        Dependencies
 	startingDir string
 	verbose     bool
@@ -21,12 +20,26 @@ type cmdFSDirsize struct {
 
 func newCmdFSDirsize(deps Dependencies) runner {
 	cmd := cmdFSDirsize{
-		flags: flags.NewFlagSet("dirsize", flag.ExitOnError),
+		flags: altflag.NewFlagSet("dirsize"),
 		deps:  deps,
 	}
-	stringTarget := cmd.flags.StringVar(&cmd.startingDir, string(argNameStartingDir), string(argUsageStartingDir))
+	stringTarget, err := cmd.flags.StringVar(
+		&cmd.startingDir,
+		string(argNameStartingDir),
+		string(argShortFlagStartingDir),
+		string(argUsageStartingDir))
+	if err != nil {
+		panic(err)
+	}
 	stringTarget.SetDefault("")
-	boolTarget := cmd.flags.BoolVar(&cmd.verbose, string(argNameVerbose), string(argUsageVerbose))
+	boolTarget, err := cmd.flags.BoolVar(
+		&cmd.verbose,
+		string(argNameVerbose),
+		string(argShortFlagVerbose),
+		string(argUsageVerbose))
+	if err != nil {
+		panic(err)
+	}
 	boolTarget.SetDefault(false)
 	return &cmd
 }
