@@ -8,10 +8,12 @@ import (
 	"os"
 	"path/filepath"
 	"slices"
+
+	"github.com/cbsinteractive/jakewan/distill/flags"
 )
 
 type cmdFSDirsize struct {
-	flags       *flag.FlagSet
+	flags       flags.FlagSet
 	deps        Dependencies
 	startingDir string
 	verbose     bool
@@ -19,11 +21,13 @@ type cmdFSDirsize struct {
 
 func newCmdFSDirsize(deps Dependencies) runner {
 	cmd := cmdFSDirsize{
-		flags: flag.NewFlagSet("dirsize", flag.ExitOnError),
+		flags: flags.NewFlagSet("dirsize", flag.ExitOnError),
 		deps:  deps,
 	}
-	cmd.flags.StringVar(&cmd.startingDir, string(argNameStartingDir), "", string(argUsageStartingDir))
-	cmd.flags.BoolVar(&cmd.verbose, string(argNameVerbose), false, string(argUsageVerbose))
+	stringTarget := cmd.flags.StringVar(&cmd.startingDir, string(argNameStartingDir), string(argUsageStartingDir))
+	stringTarget.SetDefault("")
+	boolTarget := cmd.flags.BoolVar(&cmd.verbose, string(argNameVerbose), string(argUsageVerbose))
+	boolTarget.SetDefault(false)
 	return &cmd
 }
 
