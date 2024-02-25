@@ -1,6 +1,6 @@
 package production
 
-import "github.com/cbsinteractive/jakewan/distill/cmd"
+import "github.com/jakewan/distill/cmd"
 
 func NewDependencies() cmd.Dependencies {
 	return &dependencies{}

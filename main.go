@@ -4,8 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/cbsinteractive/jakewan/distill/cmd"
-	"github.com/cbsinteractive/jakewan/distill/production"
+	"github.com/jakewan/distill/cmd"
+	"github.com/jakewan/distill/production"
 )
 
 func init() {

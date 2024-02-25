@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"slices"
 
-	"github.com/cbsinteractive/jakewan/altflag"
+	"github.com/jakewan/altflag"
 )
 
 type cmdFSDirsize struct {
